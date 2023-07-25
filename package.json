@@ -1,0 +1,23 @@
+{
+  "name": "@itstrana/auth",
+  "version": "0.0.1",
+  "description": "auth itstrana",
+  "private": false,
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Doomsquard/itstrana_auth.git"
+  },
+  "keywords": [
+    "auth"
+  ],
+  "author": "doomsquard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Doomsquard/itstrana_auth/issues"
+  },
+  "homepage": "https://github.com/Doomsquard/itstrana_auth#readme"
+}
