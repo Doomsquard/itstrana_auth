@@ -3,9 +3,9 @@ enum API_VERSIONS {
 }
 
 export enum BasedUrls {
-  authUrl = "auth_url",
+  authUrl = "auth-url",
   tokens = "tokens",
-  testUrl = "test_url", // check valid tokens
+  testUrl = "test-url", // check valid tokens
   refresh = "refresh",
   logout = "logout",
 }
@@ -13,5 +13,5 @@ export enum BasedUrls {
 export interface IConfig {
   apiUrl: string;
   apiVersion?: API_VERSIONS;
-  apiLib: "fetch" | "axios" | "ky";
+  apiLib?: "fetch" | "axios" | "ky";
 }
