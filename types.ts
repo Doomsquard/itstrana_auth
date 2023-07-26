@@ -12,5 +12,5 @@ export enum BasedUrls {
 
 export interface IConfig {
   apiUrl: string;
-  apiVersion: API_VERSIONS;
+  apiVersion?: API_VERSIONS;
 }

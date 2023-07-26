@@ -8,7 +8,7 @@ import {
 
 const createAuth = (config: IConfig) => {
   const { testUrl, authUrl, tokens, refresh, logout } = generateLinks({
-    fullPath: `${config.apiUrl}/api/v${config.apiVersion}/auth`,
+    fullPath: `${config.apiUrl}/auth`,
   });
 
   // for ex https://test.com/keyclock-login -- here check param "code" and send in tokens as param code: code
