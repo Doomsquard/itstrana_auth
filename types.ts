@@ -13,4 +13,5 @@ export enum BasedUrls {
 export interface IConfig {
   apiUrl: string;
   apiVersion?: API_VERSIONS;
+  apiLib: "fetch" | "axios" | "ky";
 }

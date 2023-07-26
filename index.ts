@@ -24,7 +24,8 @@ const createAuth = (config: IConfig) => {
 
       window.location.href = jsonResponse.url;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) throw new Error(error.message);
+      else throw new Error(error as string);
     }
   };
 
@@ -54,7 +55,8 @@ const createAuth = (config: IConfig) => {
         access_token: jsonResponse.access_token,
       };
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) throw new Error(error.message);
+      else throw new Error(error as string);
     }
   };
 
@@ -76,13 +78,15 @@ const createAuth = (config: IConfig) => {
         detail: jsonResponse.detail,
       };
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) throw new Error(error.message);
+      else throw new Error(error as string);
     }
   };
 
   const refreshReq = async (): Promise<
     | {
         detail: string;
+        status?: number;
       }
     | {
         access_token: string;
@@ -106,12 +110,22 @@ const createAuth = (config: IConfig) => {
           detail: jsonResponse.detail,
         };
       } else {
+        localStorage.setItem("access", jsonResponse.access_token);
         return {
           access_token: jsonResponse.access_token,
         };
       }
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Response) {
+        if (error.status === 401) {
+          return {
+            detail: "not auth",
+            status: 401,
+          };
+        } else throw new Error(await error.json());
+      }
+      if (error instanceof Error) throw new Error(error.message);
+      else throw new Error(error as string);
     }
   };
 
@@ -121,9 +135,30 @@ const createAuth = (config: IConfig) => {
 
       return;
     } catch (error) {
-      throw new Error(error);
+      if (error instanceof Error) throw new Error(error.message);
+      else throw new Error(error as string);
     }
   };
+
+  async function authGuard(target: any, propertyName: any, descriptor: any) {
+    if (!localStorage.getItem("access")) {
+      throw new Error("no acces in local");
+    }
+    const method = descriptor.value;
+    descriptor.value = async function (...args: any) {
+      try {
+        const responseReq = await method.apply(target, args);
+        return responseReq;
+      } catch (error) {
+        if (error instanceof Response) {
+          if (error.status === 401) {
+            await refreshReq();
+            return method.apply(target, args);
+          }
+        } else throw new Error(JSON.stringify(error));
+      }
+    };
+  }
 
   return {
     loginReq,
@@ -131,6 +166,7 @@ const createAuth = (config: IConfig) => {
     testTokenReq,
     refreshReq,
     logoutReq,
+    authGuard,
   };
 };
 
